@@ -19,5 +19,9 @@ public interface EmployeeService extends IService<Employee> {
     // 新增员工信息
     void save(EmployeeDTO employeeDTO);
 
+    // 分页查询员工信息
     PageResult pageQuery(EmployeePageQueryDTO queryDTO);
+
+    // 更新员工状态信息
+    void updateStatus(Integer status, Long id);
 }

@@ -1,6 +1,8 @@
 package com.sky.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sky.constant.MessageConstant;
@@ -98,6 +100,20 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
         this.save(employee);
     }
 
+
+    /**
+     * 员工状态修改
+     * @param status
+     * @param id
+     */
+    @Override
+    public void updateStatus(Integer status, Long id) {
+        // 使用 LambdaUpdateWrapper 来更新数据库的内容
+        LambdaUpdateWrapper<Employee> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.set(Employee::getStatus,status)
+                .eq(Employee::getId,id);
+        this.update(wrapper);
+    }
 
     @Override
     public PageResult pageQuery(EmployeePageQueryDTO queryDTO) {
