@@ -1,4 +1,4 @@
-package com.sky.admin;
+package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.EmployeeDTO;
@@ -11,8 +11,8 @@ import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/employee")
 @Slf4j
-@Api(tags = "员工管理")
+@Tag(name = "员工管理")
 public class EmployeeController {
 
     @Autowired
@@ -42,7 +42,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/login")
-    @ApiOperation("员工登录")
+    @Operation(summary = "员工登录")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
         log.info("员工登录：{}", employeeLoginDTO);
 
@@ -72,14 +72,14 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/logout")
-    @ApiOperation("员工退出")
+    @Operation(summary = "员工退出")
     public Result<String> logout() {
         return Result.success();
     }
 
 
     @PostMapping
-    @ApiOperation("员工新增")
+    @Operation(summary = "员工新增")
     public Result<T> save (@RequestBody EmployeeDTO employeeDTO){
         log.info("员工新增："+employeeDTO);
         employeeService.save(employeeDTO);
@@ -87,7 +87,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/page")
-    @ApiOperation("员工分页查询")
+    @Operation(summary = "员工分页查询")
     public Result<PageResult> page(EmployeePageQueryDTO queryDTO){
         log.info("员工分页查询"+queryDTO);
         PageResult pageResult = employeeService.pageQuery(queryDTO);
