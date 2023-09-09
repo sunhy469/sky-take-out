@@ -16,4 +16,6 @@ public class BaseContext {
         threadLocal.remove();
     }
 
+    public static void setCurrentId() {
+    }
 }

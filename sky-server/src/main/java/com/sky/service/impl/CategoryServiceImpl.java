@@ -32,10 +32,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>im
         // 正确添加
         Category category = new Category();
         BeanUtils.copyProperties(categoryDTO,category);
-        category.setCreateTime(LocalDateTime.now());
-        category.setUpdateTime(LocalDateTime.now());
-        category.setCreateUser(BaseContext.getCurrentId());
-        category.setUpdateUser(BaseContext.getCurrentId());
         category.setStatus(0);
         this.save(category);
     }

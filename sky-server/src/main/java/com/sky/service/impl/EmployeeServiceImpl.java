@@ -88,14 +88,6 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper,Employee> im
         // 设置密码 用MD5加密
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
-        // TODO 自动填充
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-
-        Long currentId = BaseContext.getCurrentId();
-        employee.setCreateUser(currentId);
-        employee.setUpdateUser(currentId);
-
         this.save(employee);
     }
 
