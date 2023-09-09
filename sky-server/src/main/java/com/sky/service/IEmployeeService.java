@@ -7,7 +7,7 @@ import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.result.PageResult;
 
-public interface EmployeeService extends IService<Employee> {
+public interface IEmployeeService extends IService<Employee> {
 
     /**
      * 员工登录

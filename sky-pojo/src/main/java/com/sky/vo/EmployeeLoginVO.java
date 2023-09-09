@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "EmployeeLoginVO返回给前端的数据")
+@Schema(name = "EmployeeLoginVO")
 public class EmployeeLoginVO implements Serializable {
 
     /**
