@@ -104,16 +104,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>im
                 new Page<>(categoryPageQueryDTO.getPage(),categoryPageQueryDTO.getPageSize());
         LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
         // 先做判断，为空就是默认查询
-        // 按分类名称查询
-        wrapper.eq(categoryPageQueryDTO.getName()!=null,
-                Category::getName,categoryPageQueryDTO.getName());
-        // 按分类类型查询
-        wrapper.eq(categoryPageQueryDTO.getType()!=null,
-                Category::getType,categoryPageQueryDTO.getType());
-        // 排序
+//        // 按分类名称查询
+//        wrapper.eq(categoryPageQueryDTO.getName()!=null,
+//                Category::getName,categoryPageQueryDTO.getName());
+//        // 按分类类型查询
+//        wrapper.eq(categoryPageQueryDTO.getType()!=null,
+//                Category::getType,categoryPageQueryDTO.getType());
+//        // 排序
         wrapper.orderByAsc(Category::getSort);
-        Page<Category> page = this.page(categoryPage, wrapper);
-        return new PageResult(page.getTotal(),page.getRecords());
+        this.page(categoryPage, wrapper);
+        return new PageResult(categoryPage.getTotal(),categoryPage.getRecords());
     }
 
 }

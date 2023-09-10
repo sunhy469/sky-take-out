@@ -27,6 +27,11 @@ public class CategoryController {
         this.categoryService=categoryService;
     }
 
+    /**
+     * 分类数据分页查询
+     * @param categoryPageQueryDTO
+     * @return
+     */
     @GetMapping("/page")
     @Operation(summary = "分类分页查询")
     public Result<PageResult> page(CategoryPageQueryDTO categoryPageQueryDTO){
