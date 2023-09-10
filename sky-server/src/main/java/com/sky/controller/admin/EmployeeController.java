@@ -33,14 +33,16 @@ import java.util.Map;
 @Tag(name = "员工管理")
 public class EmployeeController {
 
-    @Autowired
-    private IEmployeeService employeeService;
-    @Autowired
-    private JwtProperties jwtProperties;
+    private final IEmployeeService employeeService;
+    private final JwtProperties jwtProperties;
+
+    public EmployeeController(IEmployeeService employeeService, JwtProperties jwtProperties) {
+        this.employeeService = employeeService;
+        this.jwtProperties = jwtProperties;
+    }
 
     /**
      * 登录
-     *
      * @param employeeLoginDTO 给前端传递的数据模型
      * @return
      */
@@ -69,13 +71,21 @@ public class EmployeeController {
         return Result.success(employeeLoginVO);
     }
 
+    /**
+     *  退出登录
+     * @return
+     */
     @PostMapping("/logout")
     @Operation(summary = "员工退出")
     public Result<String> logout() {
         return Result.success();
     }
 
-
+    /**
+     * 新增员工
+     * @param employeeDTO
+     * @return
+     */
     @PostMapping
     @Operation(summary = "员工新增")
     public Result<T> save (@RequestBody EmployeeDTO employeeDTO){
@@ -84,6 +94,11 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     * 员工分页查询
+     * @param queryDTO
+     * @return
+     */
     @GetMapping("/page")
     @Operation(summary = "员工分页查询")
     public Result<PageResult> page(EmployeePageQueryDTO queryDTO){
@@ -92,6 +107,12 @@ public class EmployeeController {
         return Result.success(pageResult);
     }
 
+    /**
+     * 修改员工状态
+     * @param status
+     * @param id
+     * @return
+     */
     @PostMapping("/status/{status}")
     @Operation(summary = "员工状态修改")
     public Result<T> updateStatus(@PathVariable Integer status,Long id){
@@ -100,6 +121,11 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     * 查询员工信息
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     @Operation(summary = "员工信息查询")
     public Result<EmployeeDTO> getById(@PathVariable Long id){
@@ -110,6 +136,11 @@ public class EmployeeController {
         return Result.success(employeeDTO);
     }
 
+    /**
+     * 修改员工信息
+     * @param employeeDTO
+     * @return
+     */
     @PutMapping
     @Operation(summary = "员工信息修改")
     public Result<T> update(@RequestBody EmployeeDTO employeeDTO){
