@@ -43,10 +43,11 @@ public class CategoryController {
         return Result.success();
     }
 
-    // TODO 涉及多表修改
     @DeleteMapping
     @Operation(summary = "删除分类")
-    public Result<String> delete(Long id){
+    public Result<String> delete(@NotNull Long id){
+        log.info("删除分类"+id);
+        categoryService.deleteCategory(id);
         return Result.success();
     }
 

@@ -4,12 +4,18 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
+import com.sky.entity.Dish;
+import com.sky.entity.Setmeal;
 import com.sky.exception.CategoryBeenUsedException;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.CategoryMapper;
+import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.ICategoryService;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +25,35 @@ import java.time.LocalDateTime;
 
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>implements ICategoryService {
+
+    private final DishMapper dishMapper;
+
+    private final SetmealMapper setmealMapper;
+
+    public CategoryServiceImpl(DishMapper dishMapper,SetmealMapper setmealMapper){
+        this.dishMapper=dishMapper;
+        this.setmealMapper=setmealMapper;
+    }
+    // 删除分类
+    @Override
+    public void deleteCategory(Long id) {
+        // 查询当前分类是否关联菜品
+        LambdaUpdateWrapper<Dish> dishWrapper = new LambdaUpdateWrapper<>();
+        dishWrapper.eq(Dish::getCategoryId,id);
+        Long dishCount = dishMapper.selectCount(dishWrapper);
+        if (dishCount>0){
+            throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH);
+        }
+        //  查询是否关联套餐
+        LambdaUpdateWrapper<Setmeal> setmealWrapper = new LambdaUpdateWrapper<>();
+        setmealWrapper.eq(Setmeal::getId,id);
+        Long setmealCount = setmealMapper.selectCount(setmealWrapper);
+        if (setmealCount>0){
+            throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_SETMEAL);
+        }
+
+        this.removeById(id);
+    }
 
     // 新增分类
     @Override
@@ -81,7 +116,4 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>im
         return new PageResult(page.getTotal(),page.getRecords());
     }
 
-    private boolean judgeCategory(){
-        return true;
-    }
 }
