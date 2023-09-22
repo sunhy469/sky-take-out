@@ -23,7 +23,7 @@ public class DishController {
         this.dishService=dishService;
     }
 
-    @GetMapping("page")
+    @GetMapping("/page")
     @Operation(summary = "分页查询菜品数据")
     public Result<PageResult> page(DishPageQueryDTO dto){
         log.info("分页查询菜品数据");
