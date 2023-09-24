@@ -27,35 +27,45 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements ID
 
     private final IDishFlavorService dishFlavorService;
 
-    public DishServiceImpl(ICategoryService categoryService,IDishFlavorService dishFlavorService){
-        this.categoryService=categoryService;
-        this.dishFlavorService=dishFlavorService;
+    public DishServiceImpl(ICategoryService categoryService, IDishFlavorService dishFlavorService) {
+        this.categoryService = categoryService;
+        this.dishFlavorService = dishFlavorService;
     }
 
     @Override
     public PageResult queryPage(DishPageQueryDTO dto) {
+        // TODO  待优化的查询方式
         Page<Dish> dishPage = new Page<>(dto.getPage(), dto.getPageSize());
         LambdaQueryWrapper<Dish> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByAsc(Dish::getCreateTime);
-        this.page(dishPage,wrapper);
+        this.page(dishPage, wrapper);
         Page<DishVO> dishVOPage = new Page<>();
         dishVOPage.setTotal(dishPage.getTotal());
         ArrayList<DishVO> dishVOS = new ArrayList<>();
         for (Dish dish : dishPage.getRecords()) {
             DishVO dishVO = new DishVO();
-            BeanUtils.copyProperties(dish,dishVO);
+            BeanUtils.copyProperties(dish, dishVO);
             LambdaQueryWrapper<Category> categoryWrapper = new LambdaQueryWrapper<>();
-            categoryWrapper.eq(Category::getId,dish.getCategoryId());
+            categoryWrapper.eq(Category::getId, dish.getCategoryId());
             Category category = categoryService.getOne(categoryWrapper);
             dishVO.setCategoryName(category.getName());
             LambdaQueryWrapper<DishFlavor> dishFlavorWrapper = new LambdaQueryWrapper<>();
-            dishFlavorWrapper.eq(DishFlavor::getDishId,dish.getId());
+            dishFlavorWrapper.eq(DishFlavor::getDishId, dish.getId());
             List<DishFlavor> dishFlavorList = dishFlavorService.list(dishFlavorWrapper);
             dishVO.setFlavors(dishFlavorList);
             dishVOS.add(dishVO);
         }
 
         dishVOPage.setRecords(dishVOS);
-        return new PageResult(dishVOPage.getTotal(),dishVOPage.getRecords());
+        return new PageResult(dishVOPage.getTotal(), dishVOPage.getRecords());
+    }
+
+
+    @Override
+    public void updateStatus(int status, Long id) {
+        Dish dish = new Dish();
+        dish.setStatus(status);
+        dish.setId(id);
+        this.updateById(dish);
     }
 }

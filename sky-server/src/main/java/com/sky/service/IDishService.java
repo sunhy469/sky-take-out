@@ -7,4 +7,6 @@ import com.sky.result.PageResult;
 
 public interface IDishService extends IService<Dish> {
     PageResult queryPage(DishPageQueryDTO dto);
+
+    void updateStatus(int status, Long id);
 }
