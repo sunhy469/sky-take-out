@@ -15,6 +15,7 @@ import com.sky.service.IDishService;
 import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,5 +68,19 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements ID
         dish.setStatus(status);
         dish.setId(id);
         this.updateById(dish);
+    }
+
+    @Transactional
+    @Override
+    public void deleteDish(Long[] ids) {
+        for (Long id : ids) {
+            LambdaQueryWrapper<Dish> dishWrapper = new LambdaQueryWrapper<>();
+            dishWrapper.eq(Dish::getId,id);
+            this.remove(dishWrapper);
+            // 口味是一个集合，只要满足id相同就都会删除
+            LambdaQueryWrapper<DishFlavor> dishFlavorWrapper = new LambdaQueryWrapper<>();
+            dishFlavorWrapper.eq(DishFlavor::getDishId,id);
+            dishFlavorService.remove(dishFlavorWrapper);
+        }
     }
 }

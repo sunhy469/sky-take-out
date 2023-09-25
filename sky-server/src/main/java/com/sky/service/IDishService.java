@@ -9,4 +9,6 @@ public interface IDishService extends IService<Dish> {
     PageResult queryPage(DishPageQueryDTO dto);
 
     void updateStatus(int status, Long id);
+
+    void deleteDish(Long[] ids);
 }
